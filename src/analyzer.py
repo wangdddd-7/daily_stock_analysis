@@ -3542,9 +3542,11 @@ class GeminiAnalyzer:
                 logger.debug(f"=== 完整 Prompt ({len(prompt)}字符) ===\n{prompt}\n=== End Prompt ===")
 
             # 设置生成配置
+            # 16384: reasoning models (e.g. glm-5.x) burn tokens on chain-of-thought
+            # before emitting the final JSON; 8192 truncated the body and broke parsing
             generation_config = {
                 "temperature": config.llm_temperature,
-                "max_output_tokens": 8192,
+                "max_output_tokens": 16384,
             }
 
             logger.info(f"[LLM调用] 开始调用 {model_name}...")
